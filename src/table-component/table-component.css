@@ -1,0 +1,17 @@
+i {
+  font-size: 15px;
+  color: lightgray;
+}
+
+i:hover {
+  color: black;
+}
+
+.current-sorting {
+  color: black;
+}
+
+.wrapper-sort {
+  display: inline;
+  float: right;
+}
