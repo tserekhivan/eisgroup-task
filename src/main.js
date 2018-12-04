@@ -9,5 +9,6 @@ fetch('https://jsonplaceholder.typicode.com/users')
   .then(response => response.json())
   .then((data) => {
     const table = new TableComponent(data);
+    container.appendChild(table.getSearchBox());
     container.appendChild(table.getTable());
   });

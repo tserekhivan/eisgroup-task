@@ -1,4 +1,5 @@
 import template from './table-component.html';
+import searchbox from './search-box.html';
 import './table-component.css';
 
 export default class TableComponent {
@@ -35,6 +36,12 @@ export default class TableComponent {
     return this.table;
   }
 
+  getSearchBox() {
+    this.searchBox = document.createElement('div');
+    this.searchBox.innerHTML = searchbox;
+    return this.searchBox;
+  }
+
   addEvents() {
     this.table.getElementsByTagName('thead')[0].onclick = (event) => {
       if (event.target.classList.contains('fas')) {
@@ -49,6 +56,23 @@ export default class TableComponent {
           }
           event.target.classList.add('current-sorting');
         }
+      }
+    };
+
+    this.searchBox.getElementsByTagName('input')[0].onkeyup = () => {
+      const table = this.table.getElementsByTagName('tbody')[0].rows;
+      const string = this.searchBox.getElementsByTagName('input')[0].value.toLowerCase();
+      for (let i = 1; i < table.length; i += 1) {
+        let displayStyle = 'none';
+        for (let j = 0; j < table[i].children.length; j += 1) {
+          if (table[i].children[j].innerHTML.toLowerCase().indexOf(string) >= 0) {
+            displayStyle = '';
+            break;
+          } else {
+            displayStyle = 'none';
+          }
+        }
+        table[i].style.display = displayStyle;
       }
     };
   }
