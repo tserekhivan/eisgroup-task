@@ -72,7 +72,11 @@ export default class TableComponent {
             displayStyle = 'none';
           }
         }
-        table[i].style.display = displayStyle;
+        if (displayStyle === 'none') {
+          this.table.getElementsByTagName('tbody')[0].rows[i].classList.add('disable-tr');
+        } else {
+          this.table.getElementsByTagName('tbody')[0].rows[i].classList.remove('disable-tr');
+        }
       }
     };
 
@@ -136,12 +140,11 @@ export default class TableComponent {
         });
       }
     }
-    const tmp = [];
-    array.forEach((item, index) => {
-      tmp[index] = item.innerHTML;
-    });
+    for (let i = len - 1; i >= 0; i -= 1) {
+      this.table.getElementsByTagName('tbody')[0].removeChild(this.table.getElementsByTagName('tbody')[0].children[i]);
+    }
     for (let i = 0; i < len; i += 1) {
-      this.table.getElementsByTagName('tbody')[0].querySelector(`tr:nth-child(${i + 1})`).innerHTML = tmp[i];
+      this.table.getElementsByTagName('tbody')[0].appendChild(array[i]);
     }
   }
 }
