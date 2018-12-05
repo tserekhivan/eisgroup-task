@@ -62,7 +62,7 @@ export default class TableComponent {
     this.searchBox.getElementsByTagName('input')[0].onkeyup = () => {
       const table = this.table.getElementsByTagName('tbody')[0].rows;
       const string = this.searchBox.getElementsByTagName('input')[0].value.toLowerCase();
-      for (let i = 1; i < table.length; i += 1) {
+      for (let i = 0; i < table.length; i += 1) {
         let displayStyle = 'none';
         for (let j = 0; j < table[i].children.length; j += 1) {
           if (table[i].children[j].innerHTML.toLowerCase().indexOf(string) >= 0) {
@@ -75,10 +75,34 @@ export default class TableComponent {
         table[i].style.display = displayStyle;
       }
     };
+
+    this.table.getElementsByTagName('tbody')[0].ondblclick = (event) => {
+      const item = event.path[0];
+      const input = document.createElement('input');
+      input.classList.add('edit-data');
+      const oldValue = item.innerHTML;
+      input.value = oldValue;
+      item.innerHTML = '';
+      item.appendChild(input);
+      input.focus();
+
+      document.body.onclick = (clickEvent) => {
+        if (clickEvent.path[0] !== input) {
+          item.innerHTML = oldValue;
+        }
+      };
+
+      input.onkeyup = (endEvent) => {
+        if (endEvent.keyCode === 13) { // ENTER
+          item.innerHTML = input.value;
+        } else if (endEvent.keyCode === 27) { // ESC
+          item.innerHTML = oldValue;
+        }
+      };
+    };
   }
 
   sortTable(numberColumn, comparator) {
-    window.console.log(numberColumn);
     const len = this.table.getElementsByTagName('tbody')[0].children.length;
     const array = Array.from(this.table.getElementsByTagName('tbody')[0].rows);
     if (comparator === '>') {
@@ -99,7 +123,7 @@ export default class TableComponent {
     } else if (comparator === '<') {
       if (numberColumn === 0) {
         // eslint-disable-next-line max-len
-        array.sort((a, b) => +a.children[numberColumn].innerHTML + +b.children[numberColumn].innerHTML);
+        array.sort((a, b) => +b.children[numberColumn].innerHTML - +a.children[numberColumn].innerHTML);
       } else {
         array.sort((a, b) => {
           if (a.children[numberColumn].innerHTML < b.children[numberColumn].innerHTML) {

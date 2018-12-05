@@ -15,3 +15,8 @@ i:hover {
   display: inline;
   float: right;
 }
+
+.edit-data {
+  width: 100%;
+  margin: 0;
+}
